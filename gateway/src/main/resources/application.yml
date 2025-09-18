@@ -1,0 +1,27 @@
+server:
+  port: 8888
+  host_auth_service: ${HOST_AUTH_SERVICE:localhost}
+  port_auth_service: ${PORT_AUTH_SERVICE:8080}
+
+app:
+  api-prefix: /api/v1
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: http://${server.host_auth_service}:${server.port_auth_service}
+          predicates:
+            - Path=${app.api-prefix}/auth/**
+          filters:
+            - StripPrefix=2
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: auth-service
+        url: ${app.api-prefix}/auth/v3/api-docs
