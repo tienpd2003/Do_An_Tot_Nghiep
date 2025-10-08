@@ -14,6 +14,7 @@ public class ProductAttribute {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "attribute_id", nullable = false)
   private Long attributeId;
 
   @Column(nullable = false, length = 100)
@@ -23,6 +24,6 @@ public class ProductAttribute {
   private String value;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "product_id", nullable = false)
-  private BaseProduct product;
+  @JoinColumn(name = "product_version_id", nullable = false)
+  private ProductVersion productVersion;
 }

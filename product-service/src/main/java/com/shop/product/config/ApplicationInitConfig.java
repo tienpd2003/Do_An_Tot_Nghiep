@@ -27,95 +27,57 @@ public class ApplicationInitConfig {
           value = "datasource.driver-class-name",
           havingValue = "com.mysql.cj.jdbc.Driver")
   @Transactional
-  ApplicationRunner applicationRunner(ProductRepository productRepository,
-                                      ProductAttributeRepository productAttributeRepository,
-                                      CategoryRepository categoryRepository,
-                                      InventoryRepository inventoryRepository,
+  ApplicationRunner applicationRunner(CategoryRepository categoryRepository,
                                       BrandRepository brandRepository,
                                       BrandCategoryRepository brandCategoryRepository) {
     log.info("Initializing application.....");
     return args -> {
-
-      if (productRepository.findByName("SP test").isEmpty()) {
-        List<Category> categories = new ArrayList<>();
-        List<Brand> brands = new ArrayList<>();
-        List<BrandCategory> brandCategories = new ArrayList<>();
-
-        for (CategoryName categoryName : CategoryName.values()) {
-          categories.add(
-                  Category.builder()
-                          .categoryName(categoryName.getName())
-                          .build()
-          );
+        if (categoryRepository.count() == 0 && brandRepository.count() == 0) {
+            createCategoryAndBrand(categoryRepository, brandRepository, brandCategoryRepository);
         }
-        categoryRepository.saveAll(categories);
-        Category smartphoneCategory = categoryRepository.findByCategoryName(CategoryName.SMARTPHONE.getName()).orElseThrow();
-        for (SmartPhoneBrand smartPhoneBrand : SmartPhoneBrand.values()) {
-          Brand brand = Brand.builder()
-                  .name(smartPhoneBrand.getName())
-                  .build();
-          brands.add(brand);
-          brandCategories.add(
-                  BrandCategory.builder()
-                          .brand(brand)
-                          .category(smartphoneCategory)
-                          .build()
-          );
-        }
-
-        brandRepository.saveAll(brands);
-        brandCategoryRepository.saveAll(brandCategories);
-
-        Brand brand = brandRepository.findByName(SmartPhoneBrand.APPLE.getName()).orElseThrow();
-
-        Map<String, String> smartPhoneAttributes = Map.ofEntries(
-                Map.entry("CPU", "Snapdragon 888"),
-                Map.entry("RAM", "8GB"),
-                Map.entry("Storage", "128GB"),
-                Map.entry("Camera", "108MP"),
-                Map.entry("Battery", "4500mAh"),
-                Map.entry("OS", "Android 11"),
-                Map.entry("Screen Size", "6.5 inches"),
-                Map.entry("Screen Resolution", "2400x1080"),
-                Map.entry("Features", "5G, NFC, Fast Charging"),
-                Map.entry("Model", "Test Model"),
-                Map.entry("Color", "Black"),
-                Map.entry("Weight", "180g"),
-                Map.entry("Dimensions", "160 x 75 x 8 mm")
-        );
-
-        BaseProduct product = BaseProduct.builder()
-                .name("SP test")
-                .imgUrl("https://example.com/smartphone.jpg")
-                .description("Smartphone test")
-                .price(10000000L)
-                .warrantyMonths(12)
-                .category(smartphoneCategory)
-                .brand(brand)
-                .productStatus(ProductStatus.ACTIVE)
-                .build();
-
-        productRepository.save(product);
-        buildAttributes(product, smartPhoneAttributes, productAttributeRepository);
-
-        inventoryRepository.save(
-                Inventory.builder()
-                        .quantity(1L)
-                        .product(product)
-                        .build()
-        );
-      }
       log.info("Application initialization completed .....");
     };
   }
 
-  public static void buildAttributes(BaseProduct product, Map<String, String> attributes, ProductAttributeRepository productAttributeRepository) {
-    attributes.forEach((key, value) -> productAttributeRepository.save(
-            ProductAttribute.builder()
-                    .name(key)
-                    .value(value)
-                    .product(product)
-                    .build()));
+  public void createCategoryAndBrand(CategoryRepository categoryRepository,
+                                 BrandRepository brandRepository,
+                                 BrandCategoryRepository brandCategoryRepository) {
+    List<Category> categories = new ArrayList<>();
+    for (CategoryName value : CategoryName.values()) {
+      Category category = Category.builder()
+              .categoryName(value.getName())
+              .build();
+      categories.add(category);
+    }
+    categoryRepository.saveAll(categories);
+    log.info("Categories initialized");
+
+    List<Brand> brands = new ArrayList<>();
+    for (SmartPhoneBrand value : SmartPhoneBrand.values()) {
+      Brand brand = Brand.builder()
+              .name(value.getName())
+              .description(value.getName() + " description")
+              .build();
+      brands.add(brand);
+    }
+    brandRepository.saveAll(brands);
+    log.info("Brands initialized");
+
+    Map<String, Category> categoryMap = categoryRepository.findAll().stream()
+            .collect(java.util.stream.Collectors.toMap(Category::getCategoryName, c -> c));
+    Map<String, Brand> brandMap = brandRepository.findAll().stream()
+            .collect(java.util.stream.Collectors.toMap(Brand::getName, b -> b));
+
+    List<BrandCategory> brandCategories = new ArrayList<>();
+    for (SmartPhoneBrand value : SmartPhoneBrand.values()) {
+      BrandCategory brandCategory = BrandCategory.builder()
+              .brand(brandMap.get(value.getName()))
+              .category(categoryMap.get(CategoryName.SMARTPHONE.getName()))
+              .build();
+      brandCategories.add(brandCategory);
+    }
+    brandCategoryRepository.saveAll(brandCategories);
+    log.info("Brand-Categories initialized");
   }
 }
 
