@@ -26,4 +26,7 @@ public class ProductAttribute {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_version_id", nullable = false)
   private ProductVersion productVersion;
+
+  @Column(name = "attribute_group", length = 100)
+  private String attributeGroup;
 }

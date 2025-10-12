@@ -1,0 +1,14 @@
+@import './generated.css';
+
+/* If you need to override or add small utilities, place them here */
+/* Keep custom component styles in src/styles/tailwind.css under @layer components instead */
+
+html,
+body,
+#root {
+  height: 100%
+}
+
+body {
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial
+}

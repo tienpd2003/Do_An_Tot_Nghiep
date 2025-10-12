@@ -1,0 +1,148 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Preserve the project's custom component styles inside an @layer so Tailwind can coexist */
+@layer components {
+  :root {
+    --bg: #f7f7f9;
+    --card: #ffffff;
+    --muted: #6b7280;
+    --accent: #1f2937;
+    --primary: #0f766e;
+  }
+
+  .page-root {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    padding: 40px
+  }
+
+  .login-shell {
+    display: flex;
+    max-width: 980px;
+    width: 100%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.9));
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(16, 24, 40, 0.08)
+  }
+
+  .brand-panel {
+    flex: 1.1;
+    padding: 40px 36px;
+    background: linear-gradient(135deg, #ffffff, #fafafa);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start
+  }
+
+  .brand-title {
+    font-family: 'Playfair Display', serif;
+    margin: 8px 0;
+    font-size: 28px;
+    color: var(--accent)
+  }
+
+  .brand-sub {
+    color: var(--muted);
+    margin: 0 0 24px
+  }
+
+  .logo {
+    width: 64px
+  }
+
+  .form-panel {
+    flex: 1;
+    padding: 48px 44px
+  }
+
+  .form-panel h2 {
+    margin: 0 0 6px;
+    font-size: 22px
+  }
+
+  .muted {
+    color: var(--muted);
+    margin-bottom: 18px
+  }
+
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    max-width: 380px
+  }
+
+  .field span {
+    display: block;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 6px
+  }
+
+  .field input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e6e9ee;
+    border-radius: 8px;
+    font-size: 15px
+  }
+
+  .inline {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    color: var(--muted);
+    font-size: 14px
+  }
+
+  .btn {
+    margin-top: 6px;
+    background: var(--primary);
+    color: white;
+    padding: 12px;
+    border-radius: 10px;
+    border: 0;
+    font-weight: 600;
+    cursor: pointer
+  }
+
+  .btn:hover {
+    opacity: 0.95
+  }
+
+  .footer-row {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px
+  }
+
+  .link {
+    color: var(--primary);
+    font-size: 13px;
+    text-decoration: none
+  }
+
+  .error {
+    background: #fee2e2;
+    color: #b91c1c;
+    padding: 10px;
+    border-radius: 8px
+  }
+
+  @media(max-width:860px) {
+    .login-shell {
+      flex-direction: column
+    }
+
+    .brand-panel {
+      align-items: center;
+      text-align: center
+    }
+  }
+}
