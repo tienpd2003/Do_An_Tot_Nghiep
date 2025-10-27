@@ -17,16 +17,16 @@ public class ProductAttribute {
   @Column(name = "attribute_id", nullable = false)
   private Long attributeId;
 
-  @Column(nullable = false, length = 100)
+  @Column(name = "attribute_name", nullable = false, length = 100)
   private String name;
 
-  @Column(nullable = false, length = 255)
+  @Column(name = "attribute_value", nullable = false, columnDefinition = "TEXT")
   private String value;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "product_version_id", nullable = false)
-  private ProductVersion productVersion;
+  @Column(name = "type_attribute", nullable = false, length = 100)
+  private String typeAttribute;
 
-  @Column(name = "attribute_group", length = 100)
-  private String attributeGroup;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "product_id", nullable = false)
+  private BaseProduct baseProduct;
 }

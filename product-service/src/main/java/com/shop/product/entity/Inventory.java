@@ -21,11 +21,12 @@ public class Inventory extends BaseEntity {
   private Long inventoryId;
 
   @Column(name = "quantity", nullable = false)
+  @Min(value = 0, message = "Quantity must be non-negative")
   private Long quantity;
 
   @OneToOne
-  @JoinColumn(name = "product_id", nullable = false, unique = true)
-  private BaseProduct product;
+  @JoinColumn(name = "product_color_id", nullable = false, unique = true)
+  private ProductColor productColor;
 
   @Version
   private Long version;

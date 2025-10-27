@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.vuongdev.common.model.BaseEntity;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Entity
@@ -19,20 +21,14 @@ public class BaseProduct extends BaseEntity {
   @Column(name = "product_id", nullable = false, unique = true)
   private Long productId;
 
-  @Column(name = "img_url", length = 255)
-  private String imgUrl;
+  @Column(name = "base_product_name", nullable = false, length = 200, unique = true)
+  private String baseProductName;
 
-  @Column(name = "product_name", nullable = false, length = 100, unique = true)
-  private String name;
-
-  @Column(name = "description", length = 1000)
+  @Column(name = "description", columnDefinition = "TEXT")
   private String description;
 
-  @Column(name = "price", nullable = false)
-  private Long price;
-
-  @Column(name = "warranty_months", nullable = false)
-  private Integer warrantyMonths;
+  @Column(name = "source_url", length = 500)
+  private String sourceUrl;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "category_id", nullable=false)
@@ -45,4 +41,13 @@ public class BaseProduct extends BaseEntity {
   @Enumerated(EnumType.STRING)
   @Column(name = "product_status", nullable = false)
   private ProductStatus productStatus;
+
+  @OneToMany(mappedBy = "baseProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<ProductVersion> versions;
+
+  @OneToMany(mappedBy = "baseProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<ProductAttribute> baseAttributes;
+
+  @OneToMany(mappedBy = "baseProduct", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<Review> reviews;
 }

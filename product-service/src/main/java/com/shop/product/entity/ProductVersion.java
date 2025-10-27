@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
-import java.util.UUID;
 
 @Table(name = "tbl_product_versions")
 @AllArgsConstructor
@@ -21,22 +20,19 @@ public class ProductVersion {
   @Id
   private Long productVersionId;
 
-  @Column(name = "version_code", nullable = false, unique = true)
-  private UUID versionCode = UUID.randomUUID();
-
-  @Column(name = "version", nullable = false, length = 50)
+  @Column(name = "version_name", nullable = false, length = 50)
   private String versionName;
 
-  @Column(name = "description", length = 255)
-  private String description;
+  @Column(name = "product_name", nullable = false, length = 200)
+  private String productName;
+
+  @Column(name = "version_url", length = 500)
+  private String versionUrl;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "product_id", nullable = false)
-  private BaseProduct product;
+  private BaseProduct baseProduct;
 
-  @Column(name = "price", nullable = false)
-  private Long price;
-
-  @Column(name = "is_base_version", nullable = false)
-  private boolean isBaseVersion;
+  @OneToMany(mappedBy = "productVersion", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<ProductColor> colors;
 }
