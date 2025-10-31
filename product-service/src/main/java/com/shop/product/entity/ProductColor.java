@@ -28,7 +28,7 @@ public class ProductColor {
     @JoinColumn(name = "product_version_id", nullable = false)
     private ProductVersion productVersion;
 
-    @Column(name = "image_url", nullable = false, columnDefinition = "json")
+    @Column(name = "image_urls", nullable = false, columnDefinition = "json")
     @Convert(converter = StringListJsonConverter.class)
-    private List<String> imageUrl;
+    private List<String> imageUrls;
 }
